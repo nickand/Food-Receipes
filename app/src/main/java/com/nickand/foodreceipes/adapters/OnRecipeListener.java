@@ -1,4 +1,9 @@
 package com.nickand.foodreceipes.adapters;
 
-public class OnRecipeListener {
+public interface OnRecipeListener {
+
+    void onRecipeClick(int position);
+
+    void onCategoryClick(String category);
 }
+

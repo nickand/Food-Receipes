@@ -7,9 +7,8 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Arrays;
-import java.util.List;
 
-public class Recipes implements Parcelable {
+public class Recipe implements Parcelable {
 
     @SerializedName("publisher")
     @Expose
@@ -20,9 +19,9 @@ public class Recipes implements Parcelable {
     @SerializedName("title")
     @Expose
     private String title;
-    @SerializedName("recipes")
+    @SerializedName("ingredients")
     @Expose
-    private String[] recipes = null;
+    private String[] ingredients = null;
     @SerializedName("source_url")
     @Expose
     private String sourceUrl;
@@ -39,14 +38,42 @@ public class Recipes implements Parcelable {
     @Expose
     private String publisherUrl;
 
-    public Recipes(String publisher, String title, String[] recipes, String recipeId, String imageUrl, Double socialRank) {
+    public Recipe(String publisher, String title, String[] ingredients, String recipeId, String imageUrl, Double socialRank) {
         this.publisher = publisher;
         this.title = title;
-        this.recipes = recipes;
+        this.ingredients = ingredients;
         this.recipeId = recipeId;
         this.imageUrl = imageUrl;
         this.socialRank = socialRank;
     }
+
+    protected Recipe(Parcel in) {
+        publisher = in.readString();
+        f2fUrl = in.readString();
+        title = in.readString();
+        ingredients = in.createStringArray();
+        sourceUrl = in.readString();
+        recipeId = in.readString();
+        imageUrl = in.readString();
+        if (in.readByte() == 0) {
+            socialRank = null;
+        } else {
+            socialRank = in.readDouble();
+        }
+        publisherUrl = in.readString();
+    }
+
+    public static final Creator<Recipe> CREATOR = new Creator<Recipe>() {
+        @Override
+        public Recipe createFromParcel(Parcel in) {
+            return new Recipe(in);
+        }
+
+        @Override
+        public Recipe[] newArray(int size) {
+            return new Recipe[size];
+        }
+    };
 
     public String getPublisher() {
         return publisher;
@@ -114,11 +141,11 @@ public class Recipes implements Parcelable {
 
     @Override
     public String toString() {
-        return "Recipes{" +
+        return "Recipe{" +
                 "publisher='" + publisher + '\'' +
                 ", f2fUrl='" + f2fUrl + '\'' +
                 ", title='" + title + '\'' +
-                ", recipes=" + Arrays.toString(recipes) +
+                ", ingredients=" + Arrays.toString(ingredients) +
                 ", sourceUrl='" + sourceUrl + '\'' +
                 ", recipeId='" + recipeId + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
@@ -134,6 +161,19 @@ public class Recipes implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-
+        dest.writeString(publisher);
+        dest.writeString(f2fUrl);
+        dest.writeString(title);
+        dest.writeStringArray(ingredients);
+        dest.writeString(sourceUrl);
+        dest.writeString(recipeId);
+        dest.writeString(imageUrl);
+        if (socialRank == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeDouble(socialRank);
+        }
+        dest.writeString(publisherUrl);
     }
 }
