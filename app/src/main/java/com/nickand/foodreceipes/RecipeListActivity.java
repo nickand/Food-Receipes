@@ -3,15 +3,20 @@ package com.nickand.foodreceipes;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 
 import com.nickand.foodreceipes.adapters.OnRecipeListener;
 import com.nickand.foodreceipes.adapters.RecipeRecyclerAdapter;
 import com.nickand.foodreceipes.model.Recipe;
 import com.nickand.foodreceipes.util.Testing;
+import com.nickand.foodreceipes.util.VerticalSpacingItemDecorator;
 import com.nickand.foodreceipes.viewmodel.RecipeListViewModel;
 
 import java.util.List;
@@ -36,6 +41,36 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
         initRecyclerView();
         subscribeObservers();
         initSearchView();
+
+        if (!mRecipeListViewModel.isViewingRecipes()) {
+            //Display search categories
+            displaySearchCategories();
+        }
+
+        onScrollListener();
+    }
+
+    private void onScrollListener() {
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                if (dy > 0) {
+                    Log.d(TAG, "SCROLL UP");
+                    AppBarLayout appbar = findViewById(R.id.appBar);
+                    CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) appbar.getLayoutParams();
+                    lp.height = 0;
+                    appbar.setLayoutParams(lp);
+                } else {
+                    Log.d(TAG, "SCROLL DOWN");
+                    AppBarLayout appbar = findViewById(R.id.appBar);
+                    CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) appbar.getLayoutParams();
+                    lp.height = 146;
+                    appbar.setLayoutParams(lp);
+                }
+            }
+        });
     }
 
     private void subscribeObservers() {
@@ -43,8 +78,10 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
             @Override
             public void onChanged(@Nullable List<Recipe> recipes) {
                 if (recipes != null) {
-                    Testing.printRecipes(recipes);
-                    mAdapter.setRecipes(recipes);
+                    if (mRecipeListViewModel.isViewingRecipes()) {
+                        Testing.printRecipes(recipes);
+                        mAdapter.setRecipes(recipes);
+                    }
                 }
             }
         });
@@ -52,8 +89,10 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
 
     private void initRecyclerView() {
         mAdapter = new RecipeRecyclerAdapter(this);
+        VerticalSpacingItemDecorator itemDecorator = new VerticalSpacingItemDecorator(30);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.addItemDecoration(itemDecorator);
     }
 
     private void initSearchView() {
@@ -74,6 +113,11 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
         });
     }
 
+    private void displaySearchCategories() {
+        mRecipeListViewModel.setIsViewingRecipes(false);
+        mAdapter.displaySearchCategories();
+    }
+
     @Override
     public void onRecipeClick(int position) {
 
@@ -81,6 +125,16 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
 
     @Override
     public void onCategoryClick(String category) {
+        mAdapter.displayLoading();
+        mRecipeListViewModel.searchRecipeAPI(category, 1);
+    }
 
+    @Override
+    public void onBackPressed() {
+        if (mRecipeListViewModel.oBackPressed()) {
+            super.onBackPressed();
+        } else {
+            displaySearchCategories();
+        }
     }
 }
