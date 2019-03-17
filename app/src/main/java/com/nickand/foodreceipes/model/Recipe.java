@@ -38,6 +38,9 @@ public class Recipe implements Parcelable {
     @Expose
     private String publisherUrl;
 
+    public Recipe() {
+    }
+
     public Recipe(String publisher, String title, String[] ingredients, String recipeId, String imageUrl, Double socialRank) {
         this.publisher = publisher;
         this.title = title;
