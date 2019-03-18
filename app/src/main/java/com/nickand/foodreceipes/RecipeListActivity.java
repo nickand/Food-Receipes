@@ -28,6 +28,7 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
     private RecipeListViewModel mRecipeListViewModel;
     private RecyclerView mRecyclerView;
     private RecipeRecyclerAdapter mAdapter;
+    private SearchView mSearchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,7 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
         setContentView(R.layout.activity_recipe_list);
 
         mRecyclerView = findViewById(R.id.recipe_list);
+        mSearchView = findViewById(R.id.searchView);
 
         mRecipeListViewModel = ViewModelProviders.of(this).get(RecipeListViewModel.class);
 
@@ -80,6 +82,7 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
                 if (recipes != null) {
                     if (mRecipeListViewModel.isViewingRecipes()) {
                         Testing.printRecipes(recipes);
+                        mRecipeListViewModel.setIsPerformingQuery(false);
                         mAdapter.setRecipes(recipes);
                     }
                 }
@@ -96,13 +99,14 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
     }
 
     private void initSearchView() {
-        final SearchView searchView = findViewById(R.id.searchView);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
 
                 mAdapter.displayLoading();
                 mRecipeListViewModel.searchRecipeAPI(s, 1);
+                mSearchView.clearFocus();
+
                 return false;
             }
 
@@ -127,6 +131,7 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
     public void onCategoryClick(String category) {
         mAdapter.displayLoading();
         mRecipeListViewModel.searchRecipeAPI(category, 1);
+        mSearchView.clearFocus();
     }
 
     @Override
