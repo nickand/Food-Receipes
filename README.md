@@ -13,7 +13,7 @@ A collection of samples using the [Architecture Components](https://developer.an
 - [Room (Still in progress)](https://developer.android.com/topic/libraries/architecture/room) 
 - [ViewModels](https://developer.android.com/topic/libraries/architecture/viewmodel)
 - [LiveData](https://developer.android.com/topic/libraries/architecture/livedata)
-- [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager/)
+- [Executors](https://developer.android.com/reference/java/util/concurrent/Executors)
 
 ## Third party libraries
 - ![Retrofit](https://square.github.io/retrofit/)
