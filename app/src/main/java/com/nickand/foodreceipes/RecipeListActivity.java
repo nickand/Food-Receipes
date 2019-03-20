@@ -77,6 +77,14 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
                     appbar.setLayoutParams(lp);
                 }
             }
+
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                if (!recyclerView.canScrollVertically(1)) {
+                    //Search the next page
+                    mRecipeListViewModel.searchNextPage();
+                }
+            }
         });
     }
 
