@@ -2,6 +2,7 @@ package com.nickand.foodreceipes;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -137,7 +138,9 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
 
     @Override
     public void onRecipeClick(int position) {
-
+        Intent intent = new Intent(this, RecipeDetailActivity.class);
+        intent.putExtra("recipe", mAdapter.getSelectedRecipe(position));
+        startActivity(intent);
     }
 
     @Override

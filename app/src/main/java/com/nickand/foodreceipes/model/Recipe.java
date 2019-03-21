@@ -142,6 +142,14 @@ public class Recipe implements Parcelable {
         this.publisherUrl = publisherUrl;
     }
 
+    public String[] getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(String[] ingredients) {
+        this.ingredients = ingredients;
+    }
+
     @Override
     public String toString() {
         return "Recipe{" +
