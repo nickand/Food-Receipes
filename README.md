@@ -1,8 +1,8 @@
 
 ## ![webLogo](https://user-images.githubusercontent.com/4821464/54500882-d2aa2a00-48f7-11e9-9267-85463d700395.png)<br/>
-FoodRecipe is an open-source app with consume the [Food2Work API](https://www.food2fork.com/about/api) and show the best recipes from the community. Details still in progress (Work in progress)
+FoodRecipe is an open-source app with consume the [Food2Work API](https://www.food2fork.com/about/api) and show the best recipes from the community (Work in progress).
 
-![banner](https://user-images.githubusercontent.com/4821464/54502076-32580380-48ff-11e9-9f39-bfb7e83bbaac.png)
+![banner](https://user-images.githubusercontent.com/4821464/54738688-a1e22300-4b8b-11e9-80e6-cbadd5b9c08d.png)
 
 ## ![MVVM Architecture](https://developer.android.com/topic/libraries/architecture/workmanager/)
 
